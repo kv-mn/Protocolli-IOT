@@ -8,6 +8,6 @@ namespace Protocolli.IOT.Drone.ClientApp.Interfaces
 {
     internal interface IProtocol
     {
-        public Task SendAsync(string data,string drone);
+        public Task SendAsync(string data,string drone, string stato);
     }
 }

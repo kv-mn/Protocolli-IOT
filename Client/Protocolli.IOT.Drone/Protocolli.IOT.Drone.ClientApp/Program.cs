@@ -30,7 +30,7 @@ namespace Protocolli.IOT.Drone.ClientApp
             {
                 for (int i = 0; i < devices.Count; i++)
                 {
-                    await sender.SendAsync(devices[i].SimulateDeviceStatus() , $"drone{i}");
+                    await sender.SendAsync(devices[i].SimulateDeviceStatus() , $"drone{i}/", $"status");
                 }
 
                 Thread.Sleep(2000);

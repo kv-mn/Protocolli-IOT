@@ -37,10 +37,10 @@ namespace Protocolli.IOT.Drone.ClientApp.Protocols
 
 			return await mqttClient.ConnectAsync(options,CancellationToken.None);
 		}
-		public async Task SendAsync(string data, string drone)
+		public async Task SendAsync(string data, string drone, string stato)
 		{
 			var message = new MqttApplicationMessageBuilder()
-				.WithTopic(Topic + drone)
+				.WithTopic(Topic + drone + stato)
 				.WithPayload(data)
 				.WithExactlyOnceQoS()
 				.Build();

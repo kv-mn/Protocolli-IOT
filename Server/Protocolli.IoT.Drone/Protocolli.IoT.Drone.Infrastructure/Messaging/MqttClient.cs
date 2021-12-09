@@ -3,6 +3,7 @@ using MQTTnet;
 using MQTTnet.Client.Options;
 using MQTTnet.Client.Receiving;
 using MQTTnet.Extensions.ManagedClient;
+using System.Text;
 
 namespace Protocolli.IoT.Drone.Infrastructure.Messaging
 {
@@ -12,6 +13,33 @@ namespace Protocolli.IoT.Drone.Infrastructure.Messaging
         private readonly string _brokerUrl;
 
         private readonly IManagedMqttClient _mqttClient;
+
+        public MqttClient(IConfiguration configuration)
+        {
+            _clientId = configuration.GetSection("MQTT")["clientId"];
+            _brokerUrl = configuration.GetSection("MQTT")["brokerUrl"];
+
+            _mqttClient = new MqttFactory().CreateManagedMqttClient();
+            SetHandlers();
+
+            _mqttClient.UseApplicationMessageReceivedHandler(e =>
+            {
+                try
+                {
+                    string topic = e.ApplicationMessage.Topic;
+
+                    if (string.IsNullOrWhiteSpace(topic) == false)
+                    {
+                        string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                        Console.WriteLine($"Topic: {topic}. Message Received: {payload}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message, ex);
+                }
+            });
+        }
 
         public MqttClient(IConfiguration configuration, MqttApplicationMessageReceivedHandlerDelegate OnMessageReceived)
         {

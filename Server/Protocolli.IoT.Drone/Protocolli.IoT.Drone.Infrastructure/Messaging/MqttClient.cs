@@ -24,12 +24,12 @@ namespace Protocolli.IoT.Drone.Infrastructure.Messaging
 
             _mqttClient.UseConnectedHandler(e =>
             {
-                _logger.LogInformation($"Connected successfully with MQTT Broker at {_brokerUrl}.");
+                _logger.LogInformation($"{DateTime.Now} Connected successfully with MQTT Broker at {_brokerUrl}.");
             });
 
             _mqttClient.UseDisconnectedHandler(e =>
             {
-                _logger.LogInformation($"Disconnected from MQTT Broker at {_brokerUrl}.");
+                _logger.LogInformation($"{DateTime.Now} Disconnected from MQTT Broker at {_brokerUrl}.");
             }); 
         }
 

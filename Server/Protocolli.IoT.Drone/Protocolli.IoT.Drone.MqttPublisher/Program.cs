@@ -1,3 +1,4 @@
+using Protocolli.IoT.Drone.Infrastructure.Messaging;
 using Protocolli.IoT.Drone.MqttPublisher;
 using System.Reflection;
 
@@ -6,6 +7,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
+        services.AddSingleton<MqttClient>();
     })
     .Build();
 

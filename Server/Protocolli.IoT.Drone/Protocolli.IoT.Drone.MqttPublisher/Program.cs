@@ -7,7 +7,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
-        services.AddSingleton<MqttClient>();
+        services.AddSingleton<MqttClientService>();
     })
     .Build();
 

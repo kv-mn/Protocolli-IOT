@@ -8,9 +8,9 @@ namespace Protocolli.IoT.Drone.MqttPublisher
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly MqttClient _mqttClient;
+        private readonly MqttClientService _mqttClient;
 
-        public Worker(ILogger<Worker> logger, MqttClient mqttClient)
+        public Worker(ILogger<Worker> logger, MqttClientService mqttClient)
         {
             _logger = logger;
             _mqttClient = mqttClient;

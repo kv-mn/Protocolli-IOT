@@ -6,14 +6,14 @@ using MQTTnet.Extensions.ManagedClient;
 
 namespace Protocolli.IoT.Drone.Infrastructure.Messaging
 {
-    public class MqttClient
+    public class MqttClientService
     {
         private readonly string _clientId;
         private readonly string _brokerUrl;
         private readonly IManagedMqttClient _mqttClient;
         private readonly ILogger _logger;
 
-        public MqttClient(IConfiguration configuration, ILogger<MqttClient> logger)
+        public MqttClientService(IConfiguration configuration, ILogger<MqttClientService> logger)
         {
             var mqttConfiguration = configuration.GetSection("MQTT");
             _clientId = mqttConfiguration["clientId"];

@@ -13,7 +13,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddHostedService<Worker>();
         services.AddSingleton<IDroneStatusService, DroneStatusService>();
         services.AddSingleton<IDroneStatusRepository, DroneStatusRepository>();
-        services.AddSingleton<MqttClient>();
+        services.AddSingleton<MqttClientService>();
     })
     .Build();
 

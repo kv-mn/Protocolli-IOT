@@ -10,9 +10,9 @@ namespace Protocolli.IoT.Drone.MqttSubscriber
     {
         private readonly ILogger<Worker> _logger;
         private readonly IDroneStatusService _droneStatusService;
-        private readonly MqttClient _mqttClient;
+        private readonly MqttClientService _mqttClient;
 
-        public Worker(ILogger<Worker> logger, IDroneStatusService droneStatusService, MqttClient mqttClient)
+        public Worker(ILogger<Worker> logger, IDroneStatusService droneStatusService, MqttClientService mqttClient)
         {
             _logger = logger;
             _droneStatusService = droneStatusService;

@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client.Options;
-using MQTTnet.Client.Receiving;
 using MQTTnet.Extensions.ManagedClient;
-using System.Text;
 
 namespace Protocolli.IoT.Drone.Infrastructure.Messaging
 {
@@ -11,58 +10,32 @@ namespace Protocolli.IoT.Drone.Infrastructure.Messaging
     {
         private readonly string _clientId;
         private readonly string _brokerUrl;
-
         private readonly IManagedMqttClient _mqttClient;
+        private readonly ILogger _logger;
 
-        public MqttClient(IConfiguration configuration)
+        public MqttClient(IConfiguration configuration, ILogger<MqttClient> logger)
         {
-            _clientId = configuration.GetSection("MQTT")["clientId"];
-            _brokerUrl = configuration.GetSection("MQTT")["brokerUrl"];
+            var mqttConfiguration = configuration.GetSection("MQTT");
+            _clientId = mqttConfiguration["clientId"];
+            _brokerUrl = mqttConfiguration["brokerUrl"];
 
-            _mqttClient = new MqttFactory().CreateManagedMqttClient();
-            SetHandlers();
-
-            _mqttClient.UseApplicationMessageReceivedHandler(e =>
-            {
-                try
-                {
-                    string topic = e.ApplicationMessage.Topic;
-
-                    if (string.IsNullOrWhiteSpace(topic) == false)
-                    {
-                        string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                        Console.WriteLine($"Topic: {topic}. Message Received: {payload}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message, ex);
-                }
-            });
-        }
-
-        public MqttClient(IConfiguration configuration, MqttApplicationMessageReceivedHandlerDelegate OnMessageReceived)
-        {
-            _clientId = configuration.GetSection("MQTT")["clientId"];
-            _brokerUrl = configuration.GetSection("MQTT")["brokerUrl"];
-
+            _logger = logger;
             _mqttClient = new MqttFactory().CreateManagedMqttClient();
 
-            _mqttClient.ApplicationMessageReceivedHandler = OnMessageReceived;
-            SetHandlers();
-        }
-
-        private void SetHandlers()
-        {
             _mqttClient.UseConnectedHandler(e =>
             {
-                Console.WriteLine($"Connected successfully with MQTT Broker at {_brokerUrl}.");
+                _logger.LogInformation($"Connected successfully with MQTT Broker at {_brokerUrl}.");
             });
 
             _mqttClient.UseDisconnectedHandler(e =>
             {
-                Console.WriteLine($"Disconnected from MQTT Broker at {_brokerUrl}.");
-            });
+                _logger.LogInformation($"Disconnected from MQTT Broker at {_brokerUrl}.");
+            }); 
+        }
+
+        public void SetMessageReceivedHandler(Action<MqttApplicationMessageReceivedEventArgs> messageReceivedHandlerDelegate)
+        {
+            _mqttClient.UseApplicationMessageReceivedHandler(messageReceivedHandlerDelegate);
         }
 
         public async Task ConnectAsync()
@@ -81,7 +54,7 @@ namespace Protocolli.IoT.Drone.Infrastructure.Messaging
             await _mqttClient.StartAsync(options);
         }
 
-        public async Task PublishAsync(string topic, string payload, bool retainFlag = true, int qos = 0)
+        public async Task PublishAsync(string topic, string payload, int qos, bool retainFlag = false)
         {
             await _mqttClient.PublishAsync(new MqttApplicationMessageBuilder()
               .WithTopic(topic)
@@ -91,7 +64,7 @@ namespace Protocolli.IoT.Drone.Infrastructure.Messaging
               .Build());
         }
 
-        public async Task SubscribeAsync(string topic, int qos = 0)
+        public async Task SubscribeAsync(string topic, int qos)
         {
             await _mqttClient.SubscribeAsync(new MqttTopicFilterBuilder()
               .WithTopic(topic)

@@ -1,0 +1,94 @@
+﻿@page "/drones"
+@using MQTTnet
+@using System.Text.Json
+@using MQTTnet.Client.Options
+@inject MqttClientService Mqtt
+@inject IConfiguration Configuration
+@using Models
+
+<PageTitle>Drones</PageTitle>
+
+<h1>Drones</h1>
+
+<div class="row">
+    @foreach (var d in drones)
+    {
+        <div class="col-md-4">
+            <div class="card mb-2">
+                <div class="card-header">
+                    <h2>Drone @d.DroneId</h2>
+                </div>
+                <div class="card-body">
+                    <p>Velocity: @d.LastStatus.Velocity</p>
+                    <p>Battery: @d.LastStatus.Battery</p>
+                    <p>Position: {@d.LastStatus.Position.X, @d.LastStatus.Position.Y, @d.LastStatus.Position.Z}</p>
+                    <p>TimeStamp: @d.LastStatus.Timestamp</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@*<ul>
+    @foreach (var dronestatus in droneStatuses)
+    {
+    <li>@dronestatus.DroneId</li>
+    }
+    </ul>*@
+
+@code {
+    private System.Collections.ObjectModel.ObservableCollection<Drone> drones = new();
+    private System.Collections.ObjectModel.ObservableCollection<DroneStatus> droneStatuses = new();
+
+    private string _clientId;
+    private string _brokerUrl;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var mqttConfiguration = Configuration.GetSection("MQTT");
+        _clientId = mqttConfiguration["clientId"];
+        _brokerUrl = mqttConfiguration["brokerUrl"];
+        Mqtt.SetMessageReceivedHandler(OnSubscriberMessageReceived);
+
+        var clientOptions = new MqttClientOptionsBuilder()
+            .WithClientId(_clientId)
+            .WithWebSocketServer(_brokerUrl)
+            .WithCleanSession(true)
+            .WithKeepAlivePeriod(TimeSpan.FromSeconds(5))
+            .Build();
+
+
+        await Mqtt.ConnectAsync(clientOptions);
+        await Mqtt.SubscribeAsync("gameofdrones/+/status", 0);
+    }
+
+    private void OnSubscriberMessageReceived(MqttApplicationMessageReceivedEventArgs x)
+    {
+        var payload = x.ApplicationMessage.ConvertPayloadToString();
+
+        var droneStatus = JsonSerializer.Deserialize<DroneStatus>(payload);
+        //int index = drones.Select(x => x.DroneId == droneStatus.DroneId);
+        ////int index = drones.FindIndex(x => x.DroneId == droneStatus.DroneId);
+
+        //if (index != -1)
+        //    drones[index].LastStatus = droneStatus;
+
+        var item = drones.FirstOrDefault(x => x.DroneId == droneStatus.DroneId);
+        int index = drones.IndexOf(item);
+        if (item != null)
+        {
+            drones[index].LastStatus = droneStatus;
+
+        }
+        else
+        {
+            var ds = new Drone();
+            ds.DroneId = droneStatus.DroneId;
+            ds.LastStatus = droneStatus;
+            drones.Add(ds);
+        }
+
+        //droneStatuses.Add(droneStatus);
+        this.StateHasChanged();
+    }
+}

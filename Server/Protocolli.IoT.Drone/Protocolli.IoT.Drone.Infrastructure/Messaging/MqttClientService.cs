@@ -23,7 +23,7 @@ namespace Protocolli.IoT.Drone.Infrastructure.Messaging
 
             _mqttClient.UseDisconnectedHandler(e =>
             {
-                _logger.LogInformation($"{DateTime.Now} Disconnected from MQTT Broker .");
+                _logger.LogInformation($"{DateTime.Now} Disconnected from MQTT Broker.");
             });
         }
 

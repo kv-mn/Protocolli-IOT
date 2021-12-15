@@ -32,7 +32,7 @@ namespace Protocolli.IoT.Drone.MqttPublisher
                     var topic = $"gameofdrones/{droneCommand.DroneId}/commands";
                     var qos = 2;
 
-                    await _mqttClient.PublishAsync(topic, payload, qos: qos);
+                    await _mqttClient.PublishAsync(topic, payload, qos, true);
 
                     _logger.LogInformation($"{DateTime.Now} | Publish | Topic: {topic} | QoS: {qos}");
                 }

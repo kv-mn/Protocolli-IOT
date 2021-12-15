@@ -8,29 +8,23 @@ namespace Protocolli.IoT.Drone.Infrastructure.Messaging
 {
     public class MqttClientService
     {
-        private readonly string _clientId;
-        private readonly string _brokerUrl;
         private readonly IManagedMqttClient _mqttClient;
         private readonly ILogger _logger;
 
-        public MqttClientService(IConfiguration configuration, ILogger<MqttClientService> logger)
+        public MqttClientService(ILogger<MqttClientService> logger)
         {
-            var mqttConfiguration = configuration.GetSection("MQTT");
-            _clientId = mqttConfiguration["clientId"];
-            _brokerUrl = mqttConfiguration["brokerUrl"];
-
             _logger = logger;
             _mqttClient = new MqttFactory().CreateManagedMqttClient();
 
             _mqttClient.UseConnectedHandler(e =>
             {
-                _logger.LogInformation($"{DateTime.Now} Connected successfully with MQTT Broker at {_brokerUrl}.");
+                _logger.LogInformation($"{DateTime.Now} Connected successfully with MQTT Broker.");
             });
 
             _mqttClient.UseDisconnectedHandler(e =>
             {
-                _logger.LogInformation($"{DateTime.Now} Disconnected from MQTT Broker at {_brokerUrl}.");
-            }); 
+                _logger.LogInformation($"{DateTime.Now} Disconnected from MQTT Broker .");
+            });
         }
 
         public void SetMessageReceivedHandler(Action<MqttApplicationMessageReceivedEventArgs> messageReceivedHandlerDelegate)
@@ -38,20 +32,17 @@ namespace Protocolli.IoT.Drone.Infrastructure.Messaging
             _mqttClient.UseApplicationMessageReceivedHandler(messageReceivedHandlerDelegate);
         }
 
-        public async Task ConnectAsync()
+        public async Task ConnectAsync(IMqttClientOptions clientOptions)
         {
             // Setup and start a managed MQTT client.
-            var options = new ManagedMqttClientOptionsBuilder()
+            var managedClientOptions = new ManagedMqttClientOptionsBuilder()
                 .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
-                .WithClientOptions(new MqttClientOptionsBuilder()
-                    .WithClientId(_clientId)
-                    .WithTcpServer(_brokerUrl)
-                    .Build())
+                .WithClientOptions(clientOptions)
                 .Build();
 
             // StartAsync returns immediately, as it starts a new thread using Task.Run, 
             // and so the calling thread needs to wait.
-            await _mqttClient.StartAsync(options);
+            await _mqttClient.StartAsync(managedClientOptions);
         }
 
         public async Task PublishAsync(string topic, string payload, int qos, bool retainFlag = false)

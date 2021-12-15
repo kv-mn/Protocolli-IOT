@@ -1,4 +1,5 @@
 using MQTTnet;
+using MQTTnet.Client.Options;
 using Protocolli.IoT.Drone.ApplicationCore.Interfaces.Services;
 using Protocolli.IoT.Drone.ApplicationCore.Models;
 using Protocolli.IoT.Drone.Infrastructure.Messaging;
@@ -11,9 +12,15 @@ namespace Protocolli.IoT.Drone.MqttSubscriber
         private readonly ILogger<Worker> _logger;
         private readonly IDroneStatusService _droneStatusService;
         private readonly MqttClientService _mqttClient;
+        private readonly string _clientId;
+        private readonly string _brokerUrl;
 
-        public Worker(ILogger<Worker> logger, IDroneStatusService droneStatusService, MqttClientService mqttClient)
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, IDroneStatusService droneStatusService, MqttClientService mqttClient)
         {
+            var mqttConfiguration = configuration.GetSection("MQTT");
+            _clientId = mqttConfiguration["clientId"];
+            _brokerUrl = mqttConfiguration["brokerUrl"];
+
             _logger = logger;
             _droneStatusService = droneStatusService;
             _mqttClient = mqttClient;
@@ -23,8 +30,13 @@ namespace Protocolli.IoT.Drone.MqttSubscriber
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var clientOptions = new MqttClientOptionsBuilder()
+                .WithClientId(_clientId)
+                .WithTcpServer(_brokerUrl)
+                .Build();
+
             _logger.LogInformation("Worker running at: {time}", DateTime.Now);
-            await _mqttClient.ConnectAsync();
+            await _mqttClient.ConnectAsync(clientOptions);
             await _mqttClient.SubscribeAsync("gameofdrones/+/status", 0);
         }
 
@@ -32,7 +44,7 @@ namespace Protocolli.IoT.Drone.MqttSubscriber
         {
             var item = $"{DateTime.Now} | Received | Topic: {x.ApplicationMessage.Topic} | QoS: {(int)x.ApplicationMessage.QualityOfServiceLevel}";
 
-            _logger.LogInformation(item);    
+            _logger.LogInformation(item);
 
             var payload = x.ApplicationMessage.ConvertPayloadToString();
 

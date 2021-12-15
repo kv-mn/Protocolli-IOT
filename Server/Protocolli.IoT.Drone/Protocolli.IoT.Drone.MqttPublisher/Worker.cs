@@ -1,3 +1,4 @@
+using MQTTnet.Client.Options;
 using MQTTnet.Client.Receiving;
 using Protocolli.IoT.Drone.ApplicationCore.Models;
 using Protocolli.IoT.Drone.Infrastructure.Messaging;
@@ -9,9 +10,15 @@ namespace Protocolli.IoT.Drone.MqttPublisher
     {
         private readonly ILogger<Worker> _logger;
         private readonly MqttClientService _mqttClient;
+        private readonly string _clientId;
+        private readonly string _brokerUrl;
 
-        public Worker(ILogger<Worker> logger, MqttClientService mqttClient)
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, MqttClientService mqttClient)
         {
+            var mqttConfiguration = configuration.GetSection("MQTT");
+            _clientId = mqttConfiguration["clientId"];
+            _brokerUrl = mqttConfiguration["brokerUrl"];
+
             _logger = logger;
             _mqttClient = mqttClient;
         }
@@ -19,7 +26,13 @@ namespace Protocolli.IoT.Drone.MqttPublisher
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Worker running at: {time}", DateTime.Now);
-            await _mqttClient.ConnectAsync();
+
+            var clientOptions = new MqttClientOptionsBuilder()
+                    .WithClientId(_clientId)
+                    .WithTcpServer(_brokerUrl)
+                    .Build();
+
+            await _mqttClient.ConnectAsync(clientOptions);
 
             const int droneCount = 3;
 

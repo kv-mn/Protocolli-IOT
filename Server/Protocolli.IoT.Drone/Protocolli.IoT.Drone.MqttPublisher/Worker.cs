@@ -30,6 +30,8 @@ namespace Protocolli.IoT.Drone.MqttPublisher
             var clientOptions = new MqttClientOptionsBuilder()
                     .WithClientId(_clientId)
                     .WithTcpServer(_brokerUrl)
+                    .WithCleanSession(true)
+                    .WithKeepAlivePeriod(TimeSpan.FromSeconds(5))
                     .Build();
 
             await _mqttClient.ConnectAsync(clientOptions);

@@ -33,6 +33,8 @@ namespace Protocolli.IoT.Drone.MqttSubscriber
             var clientOptions = new MqttClientOptionsBuilder()
                 .WithClientId(_clientId)
                 .WithTcpServer(_brokerUrl)
+                .WithCleanSession(true)
+                .WithKeepAlivePeriod(TimeSpan.FromSeconds(5))
                 .Build();
 
             _logger.LogInformation("Worker running at: {time}", DateTime.Now);

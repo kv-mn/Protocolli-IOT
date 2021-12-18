@@ -9,5 +9,6 @@ namespace Protocolli.IOT.Drone.ClientApp.Interfaces
     internal interface IDroneStatus
     {
         public string SimulateDeviceStatus();
+        public int GetDroneId();
     }
 }

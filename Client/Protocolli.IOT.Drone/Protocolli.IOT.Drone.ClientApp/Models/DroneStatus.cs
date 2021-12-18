@@ -29,5 +29,10 @@ namespace Protocolli.IOT.Drone.ClientApp.Models
 
             return JsonSerializer.Serialize(this);
         }
+
+        public int GetDroneId()
+        {
+            return DroneId;
+        }
     }
 }

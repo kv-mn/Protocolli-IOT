@@ -5,6 +5,7 @@ using MQTTnet.Client.Options;
 using Protocolli.IOT.Drone.ClientApp.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -14,38 +15,64 @@ namespace Protocolli.IOT.Drone.ClientApp.Protocols
 {
 	internal class Mqtt : IProtocol
 	{
-		private const string Topic = "gameofdrones/";
-		private IMqttClient mqttClient;
-		private string endpoint;
+		private readonly IMqttClient _mqttClient;
+		private readonly string _url = ConfigurationManager.AppSettings["brokerMQTT"];
+		private readonly int _port = int.Parse(ConfigurationManager.AppSettings["portMQTT"]);
+		private readonly string _topic = ConfigurationManager.AppSettings["topicMQTT"];
 
-		public Mqtt(string endpoint)
-		{
-			this.endpoint = endpoint;
-
-			Connect().GetAwaiter().GetResult();
-		}
-
-		private async Task<MqttClientConnectResult> Connect()
+		public Mqtt()
 		{
 			var factory = new MqttFactory();
+			_mqttClient = factory.CreateMqttClient();
 
-			var options=new MqttClientOptionsBuilder()
-				.WithTcpServer(this.endpoint)
+			var options = new MqttClientOptionsBuilder()
+				.WithTcpServer(_url, _port)
+				.WithCleanSession(true)
 				.Build();
 
-			mqttClient = factory.CreateMqttClient();
+			_mqttClient.ConnectAsync(options, CancellationToken.None);
 
-			return await mqttClient.ConnectAsync(options,CancellationToken.None);
+			_mqttClient.UseDisconnectedHandler(async e =>
+			{
+				Console.WriteLine("Disconnected from Server ");
+				await Task.Delay(TimeSpan.FromSeconds(5));
+
+				try
+				{
+					await _mqttClient.ConnectAsync(options, CancellationToken.None);
+				}
+				catch
+				{
+					Console.WriteLine("Reconnection Failed");
+				}
+			});
+
+
+
 		}
-		public async Task SendAsync(string data, string drone, string stato)
+
+		public async Task SendAsync(IDroneStatus status)
 		{
+			int id = status.GetDroneId();
+			string data = status.SimulateDeviceStatus();
+
 			var message = new MqttApplicationMessageBuilder()
-				.WithTopic(Topic + drone + stato)
+				.WithTopic($"{_topic}{id}")
 				.WithPayload(data)
-				.WithExactlyOnceQoS()
+				.WithRetainFlag(true)
+				.WithAtMostOnceQoS()
 				.Build();
 
-			await mqttClient.PublishAsync(message,CancellationToken.None);
+			try
+			{
+				await _mqttClient.PublishAsync(message, CancellationToken.None);
+				Console.WriteLine($"Published Drone Status to topic : gameofdrones/{id}/status");
+			}
+			catch (MQTTnet.Exceptions.MqttCommunicationException ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
+			
 		}
 	}
 }

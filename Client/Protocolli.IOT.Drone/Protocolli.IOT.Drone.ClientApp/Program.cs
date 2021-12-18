@@ -14,14 +14,14 @@ namespace Protocolli.IOT.Drone.ClientApp
         {
             List<IDroneStatus> devices = new();
             //IProtocol sender = new Http();
-            IProtocol sender = new Mqtt("127.0.0.1");
+            IProtocol sender = new Mqtt();
 
             Console.WriteLine("Quanti droni vuoi simulare?");
             int dronesNumber = int.Parse(Console.ReadLine());
 
             for (int i = 0; i < dronesNumber; i++)
             {
-                devices.Add(new DroneStatus() { DroneId = i });
+                devices.Add(new DroneCommand() { DroneId = i });
             }
 
            
@@ -30,7 +30,7 @@ namespace Protocolli.IOT.Drone.ClientApp
             {
                 for (int i = 0; i < devices.Count; i++)
                 {
-                    await sender.SendAsync(devices[i].SimulateDeviceStatus() , $"drone{i}/", $"status");
+                    await sender.SendAsync(devices[i]);
                 }
 
                 Thread.Sleep(2000);

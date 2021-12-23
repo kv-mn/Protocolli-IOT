@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocolli.IoT.Drone.Applic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocolli.IoT.Drone.Infrastructure", "Protocolli.IoT.Drone.Infrastructure\Protocolli.IoT.Drone.Infrastructure.csproj", "{8F88DACC-E262-47BC-A0D5-7571C6E43F81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protocolli.IoT.Drone.ServerCoAP", "Protocolli.IoT.Drone.ServerCoAP\Protocolli.IoT.Drone.ServerCoAP.csproj", "{970395C6-1E89-4B6B-972A-3C758EC4D73D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8F88DACC-E262-47BC-A0D5-7571C6E43F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F88DACC-E262-47BC-A0D5-7571C6E43F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F88DACC-E262-47BC-A0D5-7571C6E43F81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{970395C6-1E89-4B6B-972A-3C758EC4D73D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{970395C6-1E89-4B6B-972A-3C758EC4D73D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{970395C6-1E89-4B6B-972A-3C758EC4D73D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{970395C6-1E89-4B6B-972A-3C758EC4D73D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,7 +11,6 @@
     <PackageReference Include="InfluxDB.Client" Version="3.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
-    <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>

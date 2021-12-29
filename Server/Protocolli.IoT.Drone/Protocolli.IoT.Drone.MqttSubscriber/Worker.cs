@@ -53,7 +53,7 @@ namespace Protocolli.IoT.Drone.MqttSubscriber
             try
             {
                 var droneStatus = JsonSerializer.Deserialize<DroneStatus>(payload);
-                _droneStatusService.InsertDroneStatus(droneStatus);
+                //_droneStatusService.InsertDroneStatus(droneStatus);
             }
             catch (Exception)
             {

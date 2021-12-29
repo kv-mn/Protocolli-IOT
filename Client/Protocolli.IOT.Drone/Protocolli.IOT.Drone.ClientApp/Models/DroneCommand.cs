@@ -55,6 +55,13 @@ namespace Protocolli.IOT.Drone.ClientApp.Models
 
 				Console.WriteLine($"Subscribe to topic: gameofdrones/{DroneId}/commands");
 			});
+			_mqttClient.UseApplicationMessageReceivedHandler(e =>
+			{
+				string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+				Console.WriteLine($"Command Receive at Drone {payload}");
+
+
+			});
 		}
 
 	}

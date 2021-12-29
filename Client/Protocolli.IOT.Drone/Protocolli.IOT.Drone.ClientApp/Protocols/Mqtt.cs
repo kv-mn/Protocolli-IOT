@@ -18,7 +18,7 @@ namespace Protocolli.IOT.Drone.ClientApp.Protocols
 		private readonly IMqttClient _mqttClient;
 		private readonly string _url = ConfigurationManager.AppSettings["brokerMQTT"];
 		private readonly int _port = int.Parse(ConfigurationManager.AppSettings["portMQTT"]);
-		private readonly string _topic = ConfigurationManager.AppSettings["topicMQTT"];
+		
 
 		public Mqtt()
 		{
@@ -55,12 +55,11 @@ namespace Protocolli.IOT.Drone.ClientApp.Protocols
 		{
 			int id = status.GetDroneId();
 			string data = status.SimulateDeviceStatus();
-
-			var message = new MqttApplicationMessageBuilder()
-				.WithTopic($"{_topic}{id}")
+			string _topic = $"gameofdrones/{id}/status";
+		var message = new MqttApplicationMessageBuilder()
+				.WithTopic($"{_topic}")
 				.WithPayload(data)
 				.WithRetainFlag(true)
-				.WithAtMostOnceQoS()
 				.Build();
 
 			try
@@ -72,7 +71,6 @@ namespace Protocolli.IOT.Drone.ClientApp.Protocols
 			{
 				Console.WriteLine(ex.Message);
 			}
-			
 		}
 	}
 }

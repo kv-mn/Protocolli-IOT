@@ -26,43 +26,34 @@
             //        Command: "position-led"
             //        Value: true / false
 
-            var _random = new Random();
-            var dc = new DroneCommand();
+            var random = new Random();
+            var droneCommand = new DroneCommand();
 
             var commandArray = new List<string>() { "new-ride", "close-ride", "power", "return-to-base", "position-led" };
-            var randomNumber = _random.Next(commandArray.Count);
+            var randomNumber = random.Next(commandArray.Count);
 
-            dc.DroneId = droneId;
-            dc.Command = commandArray[randomNumber];
-            dc.Timestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+            droneCommand.DroneId = droneId;
+            droneCommand.Command = commandArray[randomNumber];
+            droneCommand.Timestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
 
             switch (randomNumber)
             {
                 case 0:
-                    dc.Value = true;
-                    break;
-
                 case 1:
-                    dc.Value = true;
+                case 3:
+                    droneCommand.Value = true;
                     break;
 
                 case 2:
-                    dc.Value = _random.Next(1) == 1 ? true : false;
-                    break;
-
-                case 3:
-                    dc.Value = true;
-                    break;
-
                 case 4:
-                    dc.Value = _random.Next(1) == 1 ? true : false;
+                    droneCommand.Value = random.Next(1) == 1 ? true : false;
                     break;
 
                 default:
                     break;
             }
 
-            return dc;
+            return droneCommand;
         }
     }
 }

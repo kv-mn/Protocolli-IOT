@@ -74,3 +74,7 @@ I comandi e i relativi valori sono:
 - Accensione/Spegnimento LED di posizione
     - Command: "position-led"
     - Value: true/false
+
+### Sicurezza
+Gestiamo la sicurezza a livello Transport con utilizzo di crittografia TLS/SSL e autenticazione tramite certificato (username e password sarebbero scomodi da gestire con un ampio numero di device). <br>
+Limitiamo le autorizzazioni dei droni permettendo il publish e il subscribe ai soli topic relativi al drone stesso.

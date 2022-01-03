@@ -53,7 +53,7 @@ namespace Protocolli.IoT.Drone.ServerCoAP.Resources
                 // Internal Error
                 return new CoapMessage
                 {
-                    Code = CoapMessageCode.Post,
+                    Code = CoapMessageCode.InternalServerError,
                     Options = { new ContentFormat(ContentFormatType.TextPlain) },
                     Payload = Encoding.UTF8.GetBytes("Internal error.")
                 };

@@ -11,7 +11,7 @@ namespace Protocolli.IoT.Drone.ServerCoAP.Resources
     {
         private readonly ILogger<DroneStatusResource> _logger;
         private readonly IDroneStatusService _droneStatusService;
-        public DroneStatusResource(ILogger<DroneStatusResource> logger, IDroneStatusService droneStatusService) : base("/status")
+        public DroneStatusResource(ILogger<DroneStatusResource> logger, IDroneStatusService droneStatusService) : base("/DroneStatus")
         {
             _logger = logger;
             _droneStatusService = droneStatusService;
@@ -29,36 +29,39 @@ namespace Protocolli.IoT.Drone.ServerCoAP.Resources
             }
             catch (JsonException ex)
             {
+                _logger.LogError(ex.Message);
+
                 // Bad request
                 return new CoapMessage
                 {
                     Code = CoapMessageCode.BadRequest,
                     Options = { new ContentFormat(ContentFormatType.TextPlain) },
-                    Payload = Encoding.UTF8.GetBytes("Incorrect drone status format.")
+                    Payload = Encoding.UTF8.GetBytes("Invalid payload")
                 };
             }
 
-            // todo
             try
             {
                 _droneStatusService.InsertDroneStatus(droneStatus);
             }
-            catch (Exception ex)
+            catch (InfluxDB.Client.Core.Exceptions.HttpException ex)
             {
-                // Internal Error
+                _logger.LogError(ex.Message);
+
+                // Internal Server Error
                 return new CoapMessage
                 {
                     Code = CoapMessageCode.InternalServerError,
                     Options = { new ContentFormat(ContentFormatType.TextPlain) },
-                    Payload = Encoding.UTF8.GetBytes("Internal error.")
+                    Payload = Encoding.UTF8.GetBytes("Internal error")
                 };
             }
-            
+
             return new CoapMessage
             {
                 Code = CoapMessageCode.Created,
                 Options = { new ContentFormat(ContentFormatType.TextPlain) },
-                Payload = Encoding.UTF8.GetBytes("Drone status successfully saved.")
+                Payload = Encoding.UTF8.GetBytes("Drone status successfully saved")
             };
         }
     }

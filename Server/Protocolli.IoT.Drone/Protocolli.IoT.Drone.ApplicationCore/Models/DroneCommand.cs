@@ -9,22 +9,24 @@
 
         static public DroneCommand RandomDroneCommand(int droneId)
         {
-            //I comandi e i relativi valori sono:
-            //    Apertura nuova corsa
-            //        Command: "new-ride"
-            //        Value: true
-            //    Chiusura corsa corrente
-            //        Command: "close-ride"
-            //        Value: true
-            //    Accensione / Spegnimento
-            //        Command: "power"
-            //        Value: true / false
-            //    Rientro alla base
-            //        Command: "return-to-base"
-            //        Value: true
-            //    Accensione / Spegnimento LED di posizione
-            //        Command: "position-led"
-            //        Value: true / false
+            /*
+             * I comandi e i relativi valori sono:
+             *  Apertura nuova corsa
+             *       Command: "new-ride"
+             *       Value: true
+             *  Chiusura corsa corrente
+             *       Command: "close-ride"
+             *       Value: true
+             *  Accensione / Spegnimento
+             *       Command: "power"
+             *       Value: true / false
+             *  Rientro alla base
+             *       Command: "return-to-base"
+             *       Value: true
+             *  Accensione / Spegnimento LED di posizione
+             *       Command: "position-led"
+             *       Value: true / false
+             */
 
             var random = new Random();
             var droneCommand = new DroneCommand();

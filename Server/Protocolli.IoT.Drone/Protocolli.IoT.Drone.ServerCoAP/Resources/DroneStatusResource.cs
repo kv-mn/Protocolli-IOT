@@ -13,11 +13,6 @@ namespace Protocolli.IoT.Drone.ServerCoAP.Resources
         private readonly IDroneStatusService _droneStatusService;
         public DroneStatusResource(ILogger<DroneStatusResource> logger, IDroneStatusService droneStatusService) : base("/status")
         {
-            // ??
-            //Metadata.InterfaceDescription.Add("read");
-            //Metadata.ResourceTypes.Add("message");
-            //Metadata.Title = "Hello World";
-
             _logger = logger;
             _droneStatusService = droneStatusService;
         }

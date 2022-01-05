@@ -24,10 +24,7 @@ namespace Protocolli.IoT.Drone.ServerCoAP
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // Listen to all ip address and subscribe to multicast requests.
             await _coapServer.BindTo(new CoapUdpEndPoint(Coap.Port) { JoinMulticast = true });
-
-            // Start our server.
             await _coapServer.StartAsync(_resourceHandler, CancellationToken.None);
 
             _logger.LogInformation("Server Started!");

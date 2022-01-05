@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Protocolli.IoT.Drone.ApplicationCore.Interfaces.Services;
 using Protocolli.IoT.Drone.ApplicationCore.Models;
 
@@ -23,9 +22,19 @@ namespace Protocolli.IoT.Drone.ServerApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _droneStatusService.InsertDroneStatus(droneStatus);
-                return NoContent(); //204
+                try
+                {
+                    _droneStatusService.InsertDroneStatus(droneStatus);
+                }
+                catch (InfluxDB.Client.Core.Exceptions.HttpException ex)
+                {
+
+                    return Problem(statusCode: 500);
+                }
+
+                return NoContent();
             }
+
             return BadRequest(ModelState);
         }
     }

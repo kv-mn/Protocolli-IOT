@@ -5,7 +5,7 @@
 
 ## COAP
 ### Messaggi di stato
-Payload: JSON
+Abbiamo implementato il metodo POST che risponde a `url/DroneStatus` con il seguente payload JSON:
 ```
 {
 "DroneId": 0,
@@ -19,3 +19,10 @@ Payload: JSON
 "Timestamp": 1638459750
 }
 ```
+
+Ad ogni richiesta rispondiamo con:
+- 2.04 Changed in caso di inserimento corretto
+- 4.00 Bad Request in caso di payload non compatibile
+- 5.00 Internal Server Error in caso di fallimento durante il salvataggio nel database
+
+Le richieste POST effettuate dal Drone saranno di tipo NON (se qualche messaggio viene perso non è un problema).

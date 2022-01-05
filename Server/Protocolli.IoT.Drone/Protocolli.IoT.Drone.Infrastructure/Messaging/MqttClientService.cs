@@ -34,14 +34,11 @@ namespace Protocolli.IoT.Drone.Infrastructure.Messaging
 
         public async Task ConnectAsync(IMqttClientOptions clientOptions)
         {
-            // Setup and start a managed MQTT client.
             var managedClientOptions = new ManagedMqttClientOptionsBuilder()
                 .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
                 .WithClientOptions(clientOptions)
                 .Build();
 
-            // StartAsync returns immediately, as it starts a new thread using Task.Run, 
-            // and so the calling thread needs to wait.
             await _mqttClient.StartAsync(managedClientOptions);
         }
 

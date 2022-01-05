@@ -4,6 +4,10 @@
 - Kevin Mainardis
 
 ## MQTT
+### Shared Subscriptions
+Aggiunto un secondo client 'subscriber'. <br>
+Entrambi i client si sottoscrivono a `$share/subscribers/gameofdrones/{DroneId}/status` ricevendo i dati in maniera alternata così da bilanciare il carico.
+
 ### Opzioni di connessione:
 ### Drone 
 - Clean Session: false (vogliamo ricevere i comandi ricevuti mentre eravamo offline)

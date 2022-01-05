@@ -25,20 +25,20 @@ namespace Protocolli.IoT.Drone.Infrastructure.Data
         public void Insert(DroneStatus droneStatus)
         {
             var influxDBClient = InfluxDBClientFactory.Create(_url, _token.ToCharArray());
+            var writeApiAsync = influxDBClient.GetWriteApiAsync();
 
-            using (var writeApi = influxDBClient.GetWriteApi())
-            {
-                var point = PointData
-                    .Measurement($"drone{droneStatus.DroneId}")
-                    .Field("battery_level", droneStatus.Battery)
-                    .Field("velocity_speed", droneStatus.Velocity)
-                    .Field("position_x", droneStatus.Position.X)
-                    .Field("position_y", droneStatus.Position.Y)
-                    .Field("position_z", droneStatus.Position.Z)
-                    .Timestamp(droneStatus.Timestamp, WritePrecision.S);
+            var point = PointData
+                .Measurement($"drone{droneStatus.DroneId}")
+                .Field("battery_level", droneStatus.Battery)
+                .Field("velocity_speed", droneStatus.Velocity)
+                .Field("position_x", droneStatus.Position.X)
+                .Field("position_y", droneStatus.Position.Y)
+                .Field("position_z", droneStatus.Position.Z)
+                .Timestamp(droneStatus.Timestamp, WritePrecision.S);
 
-                writeApi.WritePoint(_bucket, _organization, point);
-            }
+            var points = new List<PointData>() { point};
+
+            var response = writeApiAsync.WritePointsAsyncWithIRestResponse(points, _bucket, _organization).GetAwaiter().GetResult();
         }
     }
 }

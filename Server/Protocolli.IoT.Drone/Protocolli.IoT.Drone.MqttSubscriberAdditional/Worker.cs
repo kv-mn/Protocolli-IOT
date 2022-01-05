@@ -5,7 +5,7 @@ using Protocolli.IoT.Drone.ApplicationCore.Models;
 using Protocolli.IoT.Drone.Infrastructure.Messaging;
 using System.Text.Json;
 
-namespace Protocolli.IoT.Drone.MqttSubscriber
+namespace Protocolli.IoT.Drone.MqttSubscriberAdditional
 {
     public class Worker : BackgroundService
     {

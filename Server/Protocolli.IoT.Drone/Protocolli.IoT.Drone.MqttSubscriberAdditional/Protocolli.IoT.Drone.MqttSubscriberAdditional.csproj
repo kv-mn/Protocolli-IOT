@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-Protocolli.IoT.Drone.MqttSubscriberAdditional-3E2C5817-885B-4B14-A041-E4B4AF61D4A1</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Protocolli.IoT.Drone.ApplicationCore\Protocolli.IoT.Drone.ApplicationCore.csproj" />
+    <ProjectReference Include="..\Protocolli.IoT.Drone.Infrastructure\Protocolli.IoT.Drone.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

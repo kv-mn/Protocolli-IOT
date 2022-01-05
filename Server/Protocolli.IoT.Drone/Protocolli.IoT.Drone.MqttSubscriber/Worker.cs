@@ -25,7 +25,7 @@ namespace Protocolli.IoT.Drone.MqttSubscriber
             _droneStatusService = droneStatusService;
             _mqttClient = mqttClient;
 
-            _mqttClient.SetMessageReceivedHandler(OnSubscriberMessageReceived);
+            _mqttClient.SetMessageReceivedHandler(MessageReceivedHandler);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -42,7 +42,7 @@ namespace Protocolli.IoT.Drone.MqttSubscriber
             await _mqttClient.SubscribeAsync("gameofdrones/+/status", 0);
         }
 
-        private void OnSubscriberMessageReceived(MqttApplicationMessageReceivedEventArgs x)
+        private void MessageReceivedHandler(MqttApplicationMessageReceivedEventArgs x)
         {
             var item = $"{DateTime.Now} | Received | Topic: {x.ApplicationMessage.Topic} | QoS: {(int)x.ApplicationMessage.QualityOfServiceLevel}";
 
@@ -53,12 +53,11 @@ namespace Protocolli.IoT.Drone.MqttSubscriber
             try
             {
                 var droneStatus = JsonSerializer.Deserialize<DroneStatus>(payload);
-                //_droneStatusService.InsertDroneStatus(droneStatus);
+                _droneStatusService.InsertDroneStatus(droneStatus);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError($"Failed to process the message: {ex.Message}");
             }
         }
     }

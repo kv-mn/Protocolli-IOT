@@ -1,6 +1,4 @@
-using CoAPNet;
-using CoAPNet.Server;
-using CoAPNet.Udp;
+using CoAP.Server;
 using Protocolli.IoT.Drone.ServerCoAP.Resources;
 
 namespace Protocolli.IoT.Drone.ServerCoAP
@@ -9,24 +7,20 @@ namespace Protocolli.IoT.Drone.ServerCoAP
     {
         private readonly ILogger<Worker> _logger;
         private readonly CoapServer _coapServer;
-        private readonly CoapResourceHandler _resourceHandler;
         private readonly DroneStatusResource _droneStatusResource;
 
-        public Worker(ILogger<Worker> logger, CoapServer coapServer, CoapResourceHandler resourceHandler, DroneStatusResource droneStatusResource)
+        public Worker(ILogger<Worker> logger, CoapServer coapServer, DroneStatusResource droneStatusResource)
         {
             _logger = logger;
             _coapServer = coapServer;
-            _resourceHandler = resourceHandler;
             _droneStatusResource = droneStatusResource;
 
-            _resourceHandler.Resources.Add(_droneStatusResource);
+            _coapServer.Add(_droneStatusResource);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _coapServer.BindTo(new CoapUdpEndPoint(Coap.Port) { JoinMulticast = true });
-            await _coapServer.StartAsync(_resourceHandler, CancellationToken.None);
-
+            _coapServer.Start();
             _logger.LogInformation("Server Started!");
         }
     }

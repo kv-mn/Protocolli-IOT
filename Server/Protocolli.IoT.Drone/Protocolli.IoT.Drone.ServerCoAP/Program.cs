@@ -1,5 +1,4 @@
-using CoAPNet.Server;
-using CoAPNet.Udp;
+using CoAP.Server;
 using Protocolli.IoT.Drone.ApplicationCore.Interfaces.Data;
 using Protocolli.IoT.Drone.ApplicationCore.Interfaces.Services;
 using Protocolli.IoT.Drone.ApplicationCore.Services;
@@ -13,8 +12,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
-        services.AddSingleton(new CoapServer(new CoapUdpTransportFactory()));
-        services.AddSingleton<CoapResourceHandler>();
+        services.AddSingleton<CoapServer>();
         services.AddSingleton<DroneStatusResource>();
         services.AddSingleton<IDroneStatusService, DroneStatusService>();
         services.AddSingleton<IDroneStatusRepository, DroneStatusRepository>();

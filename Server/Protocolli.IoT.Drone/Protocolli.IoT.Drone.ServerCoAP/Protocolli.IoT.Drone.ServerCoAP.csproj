@@ -10,9 +10,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
-    <PackageReference Include="NZSmartie.CoAPNet" Version="0.9.0" />
-    <PackageReference Include="NZSmartie.CoAPNet.Server" Version="0.9.0" />
-    <PackageReference Include="NZSmartie.CoAPNet.Udp" Version="0.9.0" />
   </ItemGroup>
 
   <ItemGroup>

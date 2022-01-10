@@ -14,7 +14,7 @@ Entrambi i client si sottoscrivono a `$share/subscribers/gameofdrones/{DroneId}/
 - Last Will Topic: `gameofdrones/{DroneId}/lastwill`
 - Last Will QoS: 2 (vogliamo sapere con precisione se un drone si è disconnesso)
 - Last Will Message: JSON <br>
-    ```
+    ```json
         {
         "DroneId": 0,
         "Error": "Unexpected exit",
@@ -34,7 +34,7 @@ Topic: `gameofdrones/{DroneId}/status` <br>
 Quality of Service: 0 (se qualche messaggio viene perso non è un problema) <br>
 Retain flag: true (in modo da poter visualizzare i dati su una pagina web senza dover aspettare l'arrivo di un nuovo messaggio) <br> 
 Payload: JSON
-```
+```json
 {
 "DroneId": 0,
 "Position":	{

@@ -14,6 +14,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddHostedService<Worker>();
         services.AddSingleton<CoapServer>();
         services.AddSingleton<DroneStatusResource>();
+        services.AddSingleton<DroneCommandResource>();
         services.AddSingleton<IDroneStatusService, DroneStatusService>();
         services.AddSingleton<IDroneStatusRepository, DroneStatusRepository>();
     })

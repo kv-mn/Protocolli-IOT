@@ -10,6 +10,7 @@ namespace Protocolli.IoT.Drone.ServerCoAP.Resources
     {
         private readonly ILogger<DroneStatusResource> _logger;
         private readonly IDroneStatusService _droneStatusService;
+
         public DroneStatusResource(ILogger<DroneStatusResource> logger, IDroneStatusService droneStatusService) : base("DroneStatus")
         {
             _logger = logger;
@@ -30,6 +31,9 @@ namespace Protocolli.IoT.Drone.ServerCoAP.Resources
             }
             catch (JsonException ex)
             {
+                // TODO
+                //System.ArgumentNullException: 'Value cannot be null. Arg_ParamName_Name'
+
                 _logger.LogError(ex.Message);
 
                 // Bad request

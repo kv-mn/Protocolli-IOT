@@ -7,7 +7,7 @@
 ### Messaggi di stato
 Ci adeguiamo al livello 2 del Richardson Maturity Model implementando un metodo POST che risponde a: <br>
 `url/v1/DroneStatus` con il seguente payload JSON:
-```
+```json
 {
 "DroneId": 0,
 "Position":	{

@@ -31,12 +31,19 @@ namespace Protocolli.IoT.Drone.ServerCoAP.Resources
             }
             catch (JsonException ex)
             {
-                // TODO
-                //System.ArgumentNullException: 'Value cannot be null. Arg_ParamName_Name'
-
                 _logger.LogError(ex.Message);
 
-                // Bad request
+                // 4.00 Bad request
+                response = new Response(StatusCode.BadRequest);
+
+                exchange.Respond(response);
+                return;
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex.Message);
+
+                // 4.00 Bad request
                 response = new Response(StatusCode.BadRequest);
 
                 exchange.Respond(response);
@@ -51,13 +58,15 @@ namespace Protocolli.IoT.Drone.ServerCoAP.Resources
             {
                 _logger.LogError(ex.Message);
 
-                // Internal Server Error
+                // 5.00 Internal Server Error
                 response = new Response(StatusCode.InternalServerError);
                 exchange.Respond(response);
                 return;
             }
 
-            response = new Response(StatusCode.Created);
+
+            // 2.04 Changed
+            response = new Response(StatusCode.Changed);
             exchange.Respond(response);
         }
     }

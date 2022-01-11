@@ -4,9 +4,13 @@
 - Kevin Mainardis
 
 ## COAP
+To do:
+- Separare DroneCommand in path dedicati ai singoli droni
+- Mettersi d'accordo sull'indirizzo che ha il server di coap e vedere il corretto funzionamento del client
+
 ### Messaggi di stato
-Payload: JSON
-```
+Abbiamo implementato il metodo POST che risponde a `url/DroneStatus` con il seguente payload JSON:
+```json
 {
 "DroneId": 0,
 "Position":	{
@@ -19,3 +23,39 @@ Payload: JSON
 "Timestamp": 1638459750
 }
 ```
+
+Ad ogni richiesta rispondiamo con:
+- 2.04 Changed in caso di inserimento corretto
+- 4.00 Bad Request in caso di payload non compatibile
+- 5.00 Internal Server Error in caso di fallimento durante il salvataggio nel database
+
+Le richieste POST effettuate dal Drone saranno di tipo NON (se qualche messaggio viene perso non è un problema).
+
+### Comandi
+Implementato il metodo GET con opzione 'observe' che risponde a `url/DroneCommand` e restituisce il seguente payload JSON relativo ad un drone predefinito:
+```json
+{
+"DroneId": 0,
+"Command": "power",
+"Value": true,
+"Timestamp": 1638459750
+}
+```
+Con l'opzione 'observe' i comandi vengono restuiti ad intervalli regolari.
+
+I comandi e i relativi valori sono:
+- Apertura nuova corsa
+    - Command: "new-ride"
+    - Value: true
+- Chiusura corsa corrente
+    - Command: "close-ride"
+    - Value: true
+- Accensione/Spegnimento
+    - Command: "power"
+    - Value: true/false
+- Rientro alla base
+    - Command: "return-to-base"
+    - Value: true
+- Accensione/Spegnimento LED di posizione
+    - Command: "position-led"
+    - Value: true/false

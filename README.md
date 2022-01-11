@@ -53,7 +53,7 @@ Topic: `gameofdrones/{DroneId}/commands` <br>
 Quality of Service: 2 (vogliamo essere sicuri che i messaggi siano stati ricevuti una volta sola) <br>
 Retain flag: false (tenere in memoria l'ultimo comando inviato può generare conflitti durante una connessione successiva) <br>
 Payload: JSON
-```
+```json
 {
 "DroneId": 0,
 "Command": "power",

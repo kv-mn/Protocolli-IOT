@@ -3,6 +3,11 @@
 - Matteo Faraoni
 - Kevin Mainardis
 
+## AMQP
+Utilizziamo AMQP come buffer nel client/drone. <br>
+L'exchange è di tipo `direct` e il binding con la coda è effettuato tramite routing key = `queue`. <br>
+L'invio dei messaggi consumati dalla coda viene effettuato tramite MQTT come descritto di seguito.
+
 ## MQTT
 ### Opzioni di connessione:
 ### Drone 

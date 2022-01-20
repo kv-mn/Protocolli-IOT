@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Protocolli.IOT.Drone.ClientApp.Models
 {
-    internal class DroneStatus : IDroneStatus
+    public class DroneStatus : IDroneStatus
     {
         private readonly Random _random = new();
         private readonly Position _position = new();

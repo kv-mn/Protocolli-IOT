@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Protocolli.IOT.Drone.ClientApp.Interfaces
 {
-    internal interface IProtocol
+    public interface IProtocol
     {
         public Task SendAsync(IDroneStatus status);
     }

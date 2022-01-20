@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Protocolli.IOT.Drone.ClientApp.Models
 {
-    internal class Position
+    public class Position
     {
         private readonly Random _random = new();
         public double X { get; set; }

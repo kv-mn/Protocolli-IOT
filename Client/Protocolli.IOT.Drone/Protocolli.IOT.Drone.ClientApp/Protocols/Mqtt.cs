@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Protocolli.IOT.Drone.ClientApp.Protocols
 {
-	internal class Mqtt : IProtocol
+	public class Mqtt : IProtocol
 	{
 		private readonly IMqttClient _mqttClient;
 		private readonly string _url = ConfigurationManager.AppSettings["brokerMQTT"];

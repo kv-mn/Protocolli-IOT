@@ -6,7 +6,6 @@
 ## COAP
 To do:
 - Separare DroneCommand in path dedicati ai singoli droni
-- Mettersi d'accordo sull'indirizzo che ha il server di coap e vedere il corretto funzionamento del client
 
 ### Messaggi di stato
 Abbiamo implementato il metodo POST che risponde a `url/DroneStatus` con il seguente payload JSON:

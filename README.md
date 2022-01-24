@@ -8,6 +8,12 @@ Utilizziamo AMQP come buffer nel client/drone. <br>
 L'exchange è di tipo `direct` e il binding con la coda è effettuato tramite routing key = `queue`. <br>
 L'invio dei messaggi consumati dalla coda viene effettuato tramite MQTT come descritto di seguito.
 
+Se volessimo utilizzare AMQP come protocollo di comunicazione tra Server e Drone useremmo: 
+- Exchange di tipo direct con routing key = `{droneId}` e n code (una per drone) per l'invio dei messaggi di stato. <br>
+Il server si sottoscrive a tutte le code e processa tutti i messaggi di stato.
+- Exchange di tipo direct con routing key = `{droneId}` e n code (una per drone) per l'invio dei comandi. <br>
+Ogni drone si sottoscrive solamente alla coda relativa ai propri comandi.
+
 ## MQTT
 ### Opzioni di connessione:
 ### Drone 

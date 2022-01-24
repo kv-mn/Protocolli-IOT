@@ -4,6 +4,9 @@
 - Kevin Mainardis
 
 ## MQTT
+To do:
+- Implementare le opzioni di Connect, Publish e Subscribe nel client/drone come descritto di seguito
+
 ### Shared Subscriptions
 Aggiunto un secondo client 'subscriber'. <br>
 Entrambi i client si sottoscrivono a `$share/subscribers/gameofdrones/{DroneId}/status` ricevendo i dati in maniera alternata così da bilanciare il carico.

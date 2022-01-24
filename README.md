@@ -4,6 +4,9 @@
 - Kevin Mainardis
 
 ## MQTT
+To do:
+- Implementare le opzioni di Connect, Publish e Subscribe nel client come descritto di seguito
+
 ### Opzioni di connessione:
 ### Drone 
 - Clean Session: false (vogliamo ricevere i comandi ricevuti mentre eravamo offline)

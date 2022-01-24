@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
+﻿using Protocolli.IOT.Drone.ClientApp.Interfaces;
+using Protocolli.IOT.Drone.ClientApp.Models;
+using System;
 using System.Configuration;
-using Protocolli.IOT.Drone.ClientApp.Interfaces;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Protocolli.IOT.Drone.ClientApp.Protocols
 {
@@ -19,8 +19,10 @@ namespace Protocolli.IOT.Drone.ClientApp.Protocols
         {
             try
             {
-                var response = await _httpClient.PostAsync(_url, new StringContent(data, Encoding.UTF8, "application/json"));
-                Console.WriteLine($"{_url} responded with status code: {response.StatusCode}");
+                var droneStatus = JsonSerializer.Deserialize<DroneStatus>(data);
+                var url = $"{_url}/{droneStatus.DroneId}";
+                var response = await _httpClient.PostAsync(url, new StringContent(data, Encoding.UTF8, "application/json"));
+                Console.WriteLine($"{url} responded with status code: {response.StatusCode}");
             }
             catch(HttpRequestException e)
             {

@@ -10,31 +10,38 @@ namespace Protocolli.IoT.Drone.ServerApp.Controllers
     public class DroneStatusController : ControllerBase
     {
         private readonly IDroneStatusService _droneStatusService;
+        private readonly ILogger<DroneStatusController> _logger;
 
-        public DroneStatusController(IDroneStatusService droneStatusService)
+        public DroneStatusController(IDroneStatusService droneStatusService, ILogger<DroneStatusController> logger)
         {
             _droneStatusService = droneStatusService;
+            _logger = logger;
         }
 
-        // POST batteries
-        [HttpPost]
-        public IActionResult Insert(DroneStatus droneStatus)
+        // POST DroneStatus/{droneId}
+        [HttpPost("{droneId}")]
+        public IActionResult Insert(int droneId, DroneStatus droneStatus)
         {
+            _logger.LogInformation($"Got request at: /v1/DroneStatus/{droneId}");
+
             if (ModelState.IsValid)
             {
                 try
                 {
                     _droneStatusService.InsertDroneStatus(droneStatus);
+
                 }
                 catch (InfluxDB.Client.Core.Exceptions.HttpException ex)
                 {
-
+                    _logger.LogError(ex.Message);
                     return Problem(statusCode: 500);
                 }
 
+                _logger.LogInformation("Successfully saved to DB");
                 return NoContent();
             }
 
+            _logger.LogError("Invalid payload");
             return BadRequest(ModelState);
         }
     }

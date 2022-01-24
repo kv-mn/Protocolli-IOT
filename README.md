@@ -5,7 +5,9 @@
 
 ## COAP
 To do:
-- Separare DroneCommand in path dedicati ai singoli droni
+- Separare DroneStatus in path `url/DroneStatus/{droneId}`
+- Separare DroneCommand in path dedicati ai singoli droni (al momento vengono restuiti i comandi relativi ad un solo drone)
+- Implementare ricezione comandi nel client/drone tramite GET con opzione observe
 
 ### Messaggi di stato
 Abbiamo implementato il metodo POST che risponde a `url/DroneStatus` con il seguente payload JSON:
